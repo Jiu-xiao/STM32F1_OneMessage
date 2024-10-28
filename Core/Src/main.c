@@ -22,7 +22,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "om.h"
+#include "stm32f1xx_hal_gpio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -212,10 +213,13 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
+  om_topic_t *topic = om_create_topic("topic", sizeof(float));
+  float buff = 1.0f;
   /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
+  for (;;) {
+    om_publish(topic, &buff, sizeof(float), true, false);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8);
+    osDelay(500);
   }
   /* USER CODE END 5 */
 }
